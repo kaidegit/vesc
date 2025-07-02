@@ -18,7 +18,7 @@ jobs:
     - name: install toolchain
       run: |
         make arm_sdk_install
-        make qt_install
+        # make qt_install
 
     - name: build 
       run: |
