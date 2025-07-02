@@ -15,14 +15,32 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Install ccache
+      run: |        
+        sudo apt update
+        sudo apt install -y ccache
+
+    - name: Set up ccache wrapper
+      run: |        
+        mkdir -p ~/ccache_bin
+        ln -s /usr/bin/ccache ~/ccache_bin/arm-none-eabi-gcc
+        ln -s /usr/bin/ccache ~/ccache_bin/arm-none-eabi-g++
+        export PATH="$HOME/ccache_bin:$PATH"
+        which arm-none-eabi-gcc
+
     - name: install toolchain
       run: |
         make arm_sdk_install
         # make qt_install
+        which arm-none-eabi-gcc
 
     - name: build 
       run: |
-        make all_fw_package -j$(nproc)
+        make all_fw_package
+
+    - name: Show ccache stats
+      run: |    
+        ccache --show-stats
 
     - name: Upload file
       uses: actions/upload-artifact@v4
