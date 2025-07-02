@@ -16,6 +16,7 @@ TARGET_PATHS := $(strip $(filter-out %core.h,$(RAW_TARGET_PATHS)))
 
 # Strip the paths down to just the names. Do this by first using `notdir` to remove the paths, then the prefix (hw_), then remove the suffix (.h). Finally, sort into lexical order.
 ALL_BOARD_NAMES := $(sort $(subst .h,,$(subst hw_,,$(filter hw_%, $(notdir $(TARGET_PATHS))))))
+ALL_EXPECT_NO_LIMITS_BOARD_NAMES := $(filter-out %_no_limits,$(ALL_BOARD_NAMES))
 
 # configure some directories that are relative to wherever ROOT_DIR is located
 TOOLS_DIR := $(ROOT_DIR)/tools
@@ -84,6 +85,7 @@ help:
 	@echo ""
 	@echo "   [Big Hammer]"
 	@echo "     all_fw               - Build firmware for all boards"
+	@echo "     all_expect_no_limits_fw - Build firmware for all boards except those with _no_limits in the name"
 	@echo "     all_fw_package       - Package firmware for boards in package list"
 	@echo ""
 	@echo "   [Unit Tests]"
@@ -251,6 +253,10 @@ FW_TARGETS := $(addprefix fw_, $(ALL_BOARD_NAMES))
 .PHONY: all_fw all_fw_clean
 all_fw:        $(addsuffix _vescfw, $(FW_TARGETS))
 all_fw_clean:  $(addsuffix _clean,  $(FW_TARGETS))
+
+FW_TARGETS := $(addprefix fw_, $(ALL_EXPECT_NO_LIMITS_BOARD_NAMES))
+.PHONY: all_expect_no_limits_fw
+all_expect_no_limits_fw: $(addsuffix _vescfw, $(FW_TARGETS))
 
 # Expand the firmware rules
 $(foreach board, $(ALL_BOARD_NAMES), $(eval $(call FW_TEMPLATE,$(board),$(BUILD_DIR)/$(board),$(board),$(GIT_BRANCH_NAME),$(GIT_COMMIT_HASH)$(GIT_DIRTY_LABEL),$(ARM_GCC_VERSION),,)))

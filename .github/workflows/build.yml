@@ -27,7 +27,7 @@ jobs:
 
     - name: build 
       run: |
-        make all_fw_package
+        make all_expect_no_limits_fw
 
     - name: Show ccache stats
       run: |    
