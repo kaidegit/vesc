@@ -15,24 +15,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install ccache
-      run: |        
-        sudo apt update
-        sudo apt install -y ccache
+    - name: ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        create-symlink: true
 
-    - name: Set up ccache wrapper
-      run: |        
-        mkdir -p ~/ccache_bin
-        ln -s /usr/bin/ccache ~/ccache_bin/arm-none-eabi-gcc
-        ln -s /usr/bin/ccache ~/ccache_bin/arm-none-eabi-g++
-        export PATH="$HOME/ccache_bin:$PATH"
-        which arm-none-eabi-gcc
-
-    - name: install toolchain
-      run: |
-        make arm_sdk_install
-        # make qt_install
-        which arm-none-eabi-gcc
+    - name: Install Arm GNU Toolchain (arm-none-eabi-gcc)
+      uses: carlosperate/arm-none-eabi-gcc-action@v1
+      with:
+        release: "7-2018-q2"
 
     - name: build 
       run: |
