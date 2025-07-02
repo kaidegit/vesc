@@ -1,0 +1,32 @@
+name: build
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: install toolchain
+      run: |
+        make arm_sdk_install
+        make qt_install
+
+    - name: build 
+      run: |
+        make all_fw_package
+
+    - name: Upload file
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifact
+        path: |
+          package/*
