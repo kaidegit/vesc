@@ -27,8 +27,8 @@ jobs:
 
     - name: Use ccache with arm-gcc
       run: |
-        /usr/bin/sh -xc ln -s /usr/bin/ccache /usr/local/bin/arm-none-eabi-gcc
-        /usr/bin/sh -xc ln -s /usr/bin/ccache /usr/local/bin/arm-none-eabi-g++
+        ln -s /usr/bin/ccache /usr/local/bin/arm-none-eabi-gcc
+        ln -s /usr/bin/ccache /usr/local/bin/arm-none-eabi-g++
         which arm-none-eabi-gcc
         ccache -s
         arm-none-eabi-gcc --version
